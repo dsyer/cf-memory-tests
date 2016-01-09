@@ -1,0 +1,11 @@
+
+---
+applications:
+- name: %{app}
+  memory: %{memory}m
+  random-route: true
+  env:
+    JBP_LOG_LEVEL: DEBUG
+  timeout: 180
+  buildpack: java_buildpack
+  command: $PWD/.java-buildpack/open_jdk_jre/bin/java -cp $PWD/.:$PWD/lib/*:$PWD/.java-buildpack/spring_auto_reconfiguration/spring_auto_reconfiguration-1.10.0_RELEASE.jar -Djava.io.tmpdir=$TMPDIR %{opts} -XX:+DisableAttachMechanism -verbose:gc sample.freemarker.SampleWebFreeMarkerApplication

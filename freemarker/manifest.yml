@@ -1,0 +1,13 @@
+
+---
+applications:
+- name: freemarker-sample
+  memory: 128m
+  host: freemarker-sample
+  env:
+    JBP_LOG_LEVEL: DEBUG
+    JBP_CONFIG_OPEN_JDK_JRE: '{memory_calculator: {memory_heuristics: {heap: 40, metaspace: 20, native: 25, stack: 8}, memory_sizes: {metaspace: "40m..", native: "20m.."}, memory_initials: {metaspace: "50%", heap: "25%"}, stack_threads: 35}}'
+    JBP_CONFIG_JAVA_OPTS: '{java_opts: "-verbose:gc -XX:CompressedClassSpaceSize=8M -XX:ReservedCodeCacheSize=4M -XX:+DisableAttachMechanism"}'
+  timeout: 180
+  buildpack: java_buildpack
+  command: $PWD/.java-buildpack/open_jdk_jre/bin/java -cp $PWD/.:$PWD/lib/*:$PWD/.java-buildpack/spring_auto_reconfiguration/spring_auto_reconfiguration-1.10.0_RELEASE.jar -Djava.io.tmpdir=$TMPDIR -XX:OnOutOfMemoryError=$PWD/.java-buildpack/open_jdk_jre/bin/killjava.sh -XX:MetaspaceSize=20M -XX:MaxMetaspaceSize=38M -Xss256K -Xms16M -Xmx60M -XX:CompressedClassSpaceSize=8M -XX:ReservedCodeCacheSize=4M -XX:+DisableAttachMechanism -verbose:gc sample.freemarker.SampleWebFreeMarkerApplication
