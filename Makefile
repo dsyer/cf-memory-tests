@@ -1,7 +1,7 @@
 SHELL := /bin/bash
 
 types = shaded boot
-apps = freemarker
+apps = freemarker zuul
 combined = $(foreach type,$(types),$(foreach app,$(apps),build/$(type)/$(app).jar))
 
 all: $(combined) run
@@ -15,15 +15,21 @@ run:
 shaded: */pom.xml build/shaded/%.jar
 
 build/shaded/%.jar: | %
-	cd $(*) && mvn clean package -P shaded,!boot
+	cd $(*) && ./mvnw clean package -P shaded,!boot
 	mkdir -p build/shaded
-	cp $(*)/target/spring*.jar $@
+	cp $(*)/target/sample*.jar $@
 
 boot: */pom.xml build/boot/%.jar
 
 build/boot/%.jar: | %
-	cd $(*) && mvn clean package -P !shaded,boot
+	cd $(*) && ./mvnw clean package -P !shaded,boot
 	mkdir -p build/boot
-	cp $(*)/target/spring*.jar $@
+	cp $(*)/target/sample*.jar $@
 
-.PHONY: all run $(apps)
+clean:
+	rm -rf build/push
+
+clean-all:
+	rm -rf build
+
+.PHONY: all run $(apps) clean clean-all

@@ -23,24 +23,54 @@ opts="$opts -XX:MaxMetaspaceSize=${1}M"; shift
 opts="$opts -XX:MetaspaceSize=${1}M"; shift
 opts="$opts -XX:CompressedClassSpaceSize=${1}M"; shift
 opts="$opts -XX:ReservedCodeCacheSize=${1}M"; shift
+main=$1; shift
 opts="$opts $*"
 
-cf delete ${app}-sample -f -r
-DIR=build/$id/$type/$limit
+if [ "${main}" == "auto" -o "${main}" == "" ]; then
+    main=""
+    rm -rf build/META-INF
+    (cd build/; jar -xf ${type}/${app}.jar META-INF/MANIFEST.MF)
+    if [ -e build/META-INF/MANIFEST.MF ]; then
+        main=`grep 'Main-Class' build/META-INF/MANIFEST.MF | awk -F ':' '{print $2}'`
+    fi
+fi
+if [ "${main}" == "" ]; then
+    main='org.springframework.boot.loader.JarLauncher'
+fi
+
+if [ "${main%JarLauncher*}" == "${main}" ]; then
+    lib='$PWD/lib/*:'
+fi
+
+cf delete benchmark -f -r
+DIR=build/push/$id/$type/$limit
 
 mkdir -p $DIR
-sed -e "s/%{app}/${app}/" -e "s/%{memory}/${limit}/" -e "s/%{opts}/${opts}/" manifest.yml.tmpl > $DIR/manifest.yml
+sed -e "s/%{app}/${app}/" -e "s/%{main}/${main}/" -e "s/%{memory}/${limit}/" -e "s/%{opts}/${opts}/" -e "s,%{lib},${lib}," manifest.yml.tmpl > $DIR/manifest.yml
 
-cf push ${app}-sample -f $DIR/manifest.yml -p build/${type}/${app}.jar | tee $DIR/push.log
+echo Pushing ${app} with main=${main}
+
+cf push benchmark -f $DIR/manifest.yml -p build/${type}/${app}.jar | tee $DIR/push.log
 
 STATUS=${PIPESTATUS[0]}
 
-cf logs --recent ${app}-sample > $DIR/recent.log
+cf logs --recent benchmark > $DIR/recent.log
 
-ROUTE=`cf app ${app}-sample | grep urls | awk '{print $2}'`
-ab -c 10 -n 100 http://$ROUTE/ | tee $DIR/ab.log
+if [ "${STATUS}" == "0" ]; then
 
-ERRORS=`grep Failed $DIR/ab.log | awk -F ':' '{print $2}'`
+    ROUTE=`cf app benchmark | grep urls | awk '{print $2}'`
+    ab -c 10 -n 100 http://$ROUTE/ | tee $DIR/ab.log
+
+    ERRORS=`egrep 'Non-2xx' $DIR/ab.log | awk -F ':' '{print $2}'`
+    if [ "${ERRORS}" == "" ]; then
+        ERRORS=`egrep 'Failed' $DIR/ab.log | awk -F ':' '{print $2}'`
+    fi
+
+fi
+
+if [ "${ERRORS}" == "" ]; then
+    ERRORS=0
+fi
 
 echo Finished: $id ${STATUS} ${ERRORS} $opts
 
