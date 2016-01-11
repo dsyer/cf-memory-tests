@@ -1,7 +1,7 @@
 SHELL := /bin/bash
 
 types = shaded boot
-apps = freemarker zuul
+apps = $(shell find . -name pom.xml | sed -e 's,/pom.xml,,')
 combined = $(foreach type,$(types),$(foreach app,$(apps),build/$(type)/$(app).jar))
 
 all: $(combined) run

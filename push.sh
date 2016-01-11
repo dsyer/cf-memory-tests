@@ -12,6 +12,11 @@ if [ "${1#\#*}" != "${1}" ]; then
     exit 0
 fi
 
+if [ "${1}" == "" ]; then
+    echo Skipping empty line
+    exit 0
+fi
+
 id=$1; shift
 app=$1; shift
 type=$1; shift
@@ -23,16 +28,17 @@ opts="$opts -XX:MaxMetaspaceSize=${1}M"; shift
 opts="$opts -XX:MetaspaceSize=${1}M"; shift
 opts="$opts -XX:CompressedClassSpaceSize=${1}M"; shift
 opts="$opts -XX:ReservedCodeCacheSize=${1}M"; shift
-main=$1; shift
+mainkey=$1; shift
 opts="$opts $*"
 
-if [ "${main}" == "auto" -o "${main}" == "" ]; then
-    main=""
-    rm -rf build/META-INF
-    (cd build/; jar -xf ${type}/${app}.jar META-INF/MANIFEST.MF)
-    if [ -e build/META-INF/MANIFEST.MF ]; then
-        main=`grep 'Main-Class' build/META-INF/MANIFEST.MF | awk -F ':' '{print $2}'`
-    fi
+main=""
+if [ "${mainkey}" == "auto" -o "${mainkey}" == "" ]; then
+    mainkey=main-class
+fi
+rm -rf build/META-INF
+(cd build/; jar -xf ${type}/${app}.jar META-INF/MANIFEST.MF)
+if [ -e build/META-INF/MANIFEST.MF ]; then
+    main=`grep -i ${mainkey} build/META-INF/MANIFEST.MF | awk -F ':' '{print $2}'`
 fi
 if [ "${main}" == "" ]; then
     main='org.springframework.boot.loader.JarLauncher'
@@ -43,7 +49,7 @@ if [ "${main%JarLauncher*}" == "${main}" ]; then
 fi
 
 cf delete benchmark -f -r
-DIR=build/push/$id/$type/$limit
+DIR=build/push/$id
 
 mkdir -p $DIR
 sed -e "s/%{app}/${app}/" -e "s/%{main}/${main}/" -e "s/%{memory}/${limit}/" -e "s/%{opts}/${opts}/" -e "s,%{lib},${lib}," manifest.yml.tmpl > $DIR/manifest.yml
@@ -52,13 +58,15 @@ echo Pushing ${app} with main=${main}
 
 cf push benchmark -f $DIR/manifest.yml -p build/${type}/${app}.jar | tee $DIR/push.log
 
-STATUS=${PIPESTATUS[0]}
+cf app benchmark > $DIR/status.txt
+
+STATUS=`tail -1 $DIR/status.txt | awk '{print $2}'`
 
 cf logs --recent benchmark > $DIR/recent.log
 
-if [ "${STATUS}" == "0" ]; then
+if [ "${STATUS}" == "running" ]; then
 
-    ROUTE=`cf app benchmark | grep urls | awk '{print $2}'`
+    ROUTE=`grep urls $DIR/status.txt | awk '{print $2}'`
     ab -c 10 -n 100 http://$ROUTE/ | tee $DIR/ab.log
 
     ERRORS=`egrep 'Non-2xx' $DIR/ab.log | awk -F ':' '{print $2}'`
