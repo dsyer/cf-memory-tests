@@ -1,7 +1,7 @@
 SHELL := /bin/bash
 
 types = shaded boot
-apps = $(shell find . -name pom.xml | sed -e 's,/pom.xml,,')
+apps = $(shell find . -name pom.xml | egrep -v target | sed -e 's,/pom.xml,,;s,./,,')
 combined = $(foreach type,$(types),$(foreach app,$(apps),build/$(type)/$(app).jar))
 
 all: $(combined) run
@@ -12,16 +12,18 @@ run:
 	echo id    app        type limit status errors > build/result.txt
 	cat input.txt | xargs -L 1 ./push.sh
 
+$(apps): $(combined)
+
 shaded: */pom.xml build/shaded/%.jar
 
-build/shaded/%.jar: | %
+build/shaded/%.jar:
 	cd $(*) && ./mvnw clean package -P shaded,!boot
 	mkdir -p build/shaded
 	cp $(*)/target/sample*.jar $@
 
 boot: */pom.xml build/boot/%.jar
 
-build/boot/%.jar: | %
+build/boot/%.jar:
 	cd $(*) && ./mvnw clean package -P !shaded,boot
 	mkdir -p build/boot
 	cp $(*)/target/sample*.jar $@

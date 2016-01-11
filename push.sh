@@ -60,7 +60,11 @@ cf push benchmark -f $DIR/manifest.yml -p build/${type}/${app}.jar | tee $DIR/pu
 
 cf app benchmark > $DIR/status.txt
 
-STATUS=`tail -1 $DIR/status.txt | awk '{print $2}'`
+if grep 'requested state: stopped' $DIR/status.txt; then
+    STATUS=stopped
+else
+    STATUS=`tail -1 $DIR/status.txt | awk '{print $2}'`
+fi
 
 cf logs --recent benchmark > $DIR/recent.log
 
