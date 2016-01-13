@@ -1,0 +1,11 @@
+
+---
+applications:
+- name: ratpack-sample
+  memory: 128m
+  host: ratpack-sample
+  env:
+    JBP_LOG_LEVEL: DEBUG
+    # JBP_CONFIG_OPEN_JDK_JRE: '{memory_calculator: {memory_heuristics: {heap: 40, metaspace: 10, native: 10, stack: 20}, memory_sizes: {metaspace: "64m..", native: "72m.."}, stack_threads: 35}}'
+  timeout: 180
+  buildpack: java_buildpack
