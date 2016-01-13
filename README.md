@@ -66,7 +66,7 @@ $ make freemarker
 $ find build
 build/boot/freemarker.jar
 build/shaded/freemarker.jar
-``
+```
 
 ### Adding a New Sample
 
