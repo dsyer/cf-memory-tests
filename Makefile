@@ -1,7 +1,7 @@
 SHELL := /bin/bash
 
 types = shaded boot
-apps = $(shell find . -name pom.xml | egrep -v target | sed -e 's,/pom.xml,,;s,./,,')
+apps = $(shell find . -name pom.xml | egrep -v target | sed -e 's,/pom.xml,,;s,./,,' | egrep -v '\.')
 combined = $(foreach type,$(types),$(foreach app,$(apps),build/$(type)/$(app).jar))
 
 all: $(combined) run

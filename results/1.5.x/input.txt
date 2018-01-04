@@ -1,0 +1,50 @@
+id        app        type  limit mx  ms  ss  maxmeta meta ccss rccs main extra
+
+# N.B. "auto" is the same as empty for "main", while "start-class"
+# means to use the start-class instead of the main-class (i.e. not
+# using JarLauncher for a Boot app)
+
+# Manual tweaks on freemarker sample
+manfb     freemarker boot   128  28  16  256  38  20 8 4 auto
+manfbm    freemarker boot   128  32  16  256  38  20 8 4 start-class
+manfs     freemarker shaded 128  24  16  256  32  20 8 4
+
+# The same manual tweaks but with initial sizes same as max
+manfbi    freemarker boot   128  28  28  256  32  20 8 4
+manfsi    freemarker shaded 128  24  24  256  32  32 8 4
+
+# Super simple recipes using just the memory limit
+ssfb128  freemarker boot   128  26  16  256  40  20 8 4
+ssfb256  freemarker boot   256  74  32  366  80  20 8 4
+ssfb512  freemarker boot   512  162 100 585  168 20 8 4
+ssfb1024 freemarker boot   1024 626 300 1024 210 20 8 4
+ssfbm128  freemarker boot   128  26  16  256  40  20 8 4 start-class
+ssfbm256  freemarker boot   256  74  32  366  80  20 8 4 start-class
+ssfbm512  freemarker boot   512  162 100 585  168 20 8 4 start-class
+ssfbm1024 freemarker boot   1024 626 300 1024 210 20 8 4 start-class
+ssfs128   freemarker shaded 128  41  16  256  40  20 8 4
+ssfs256   freemarker shaded 256  105 32  366  80  20 8 4
+ssfs512   freemarker shaded 512  224 100 585  168 20 8 4
+ssfs1024  freemarker shaded 1024 690 300 1024 210 20 8 4
+sszb128  zuul boot   128  26  16  256  40  20 8 4
+sszb256  zuul boot   256  74  32  366  80  20 8 4
+sszb512  zuul boot   512  162 100 585  168 20 8 4
+sszb1024 zuul boot   1024 626 300 1024 210 20 8 4
+sszs128  zuul shaded 128  41  16  256  40  20 8 4
+sszs256  zuul shaded 256  105 32  366  80  20 8 4
+sszs512  zuul shaded 512  224 100 585  168 20 8 4
+sszs1024 zuul shaded 1024 690 300 1024 210 20 8 4
+ssrb128  ratpack boot   128  26  16  256  40  20 8 4
+ssrb256  ratpack boot   256  74  32  366  80  20 8 4
+ssrbm128 ratpack boot   128  26  16  256  40  20 8 4 start-class
+ssrbm256 ratpack boot   256  74  32  366  80  20 8 4 start-class
+ssrs128  ratpack shaded 128  41  16  256  40  20 8 4
+ssrs256  ratpack shaded 256  105 32  366  80  20 8 4
+
+# Simple recipe using archive size and thread count
+szb256   zuul boot   256  77   16  256  74  40 16 8
+szb512   zuul boot   512  333  100 256  74  40 16 8
+szb1024  zuul boot   1024 845  300 256  74  40 16 8
+szs256   zuul shaded 256  109  32  256  74  40 16 8
+szs512   zuul shaded 512  365  100 256  74  40 16 8
+szs1024  zuul shaded 1024 877  300 256  74  40 16 8

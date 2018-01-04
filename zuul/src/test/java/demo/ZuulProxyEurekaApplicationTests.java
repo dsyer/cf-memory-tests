@@ -2,19 +2,18 @@ package demo;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
-import org.springframework.cloud.netflix.eureka.EurekaDiscoveryClient;
+import org.springframework.cloud.client.discovery.composite.CompositeDiscoveryClient;
 import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.test.context.junit4.SpringRunner;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = ZuulProxyEurekaApplication.class)
-@WebAppConfiguration
+@RunWith(SpringRunner.class)
+@SpringBootTest
 @DirtiesContext
 public class ZuulProxyEurekaApplicationTests {
 
@@ -27,7 +26,8 @@ public class ZuulProxyEurekaApplicationTests {
 
 	@Test
 	public void discoveryClientIsEureka() {
-		assertTrue("discoveryClient is wrong type", discoveryClient instanceof EurekaDiscoveryClient);
+		assertTrue("discoveryClient is wrong type",
+				discoveryClient instanceof CompositeDiscoveryClient);
 	}
 
 }

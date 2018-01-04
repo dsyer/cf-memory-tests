@@ -2,6 +2,8 @@
 
 echo $*
 
+export CF_COLOR=false
+
 if [ "${1}" == "id" ]; then
     echo Skipping header
     exit 0
@@ -45,7 +47,7 @@ if [ "${main}" == "" ]; then
 fi
 
 if [ "${main%JarLauncher*}" == "${main}" ]; then
-    lib='$PWD/lib/*:'
+    lib='$PWD/BOOT-INF/classes:$PWD/BOOT-INF/lib/*:'
 fi
 
 cf delete benchmark -f -r
@@ -70,7 +72,7 @@ cf logs --recent benchmark > $DIR/recent.log
 
 if [ "${STATUS}" == "running" ]; then
 
-    ROUTE=`grep urls $DIR/status.txt | awk '{print $2}'`
+    ROUTE=`grep routes $DIR/status.txt | awk '{print $2}'`
     ab -c 10 -n 100 http://$ROUTE/ | tee $DIR/ab.log
 
     ERRORS=`egrep 'Non-2xx' $DIR/ab.log | awk -F ':' '{print $2}'`
