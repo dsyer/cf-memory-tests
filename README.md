@@ -18,7 +18,7 @@ to `build/result.txt`. I.e. the best way to run the whole suite is:
 $ make
 ```
 
-and then look at the results in `build`. There shoudl be a file there
+and then look at the results in `build`. There should be a file there
 called `result.txt` in this format:
 
 ```
