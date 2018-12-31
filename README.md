@@ -97,6 +97,9 @@ which takes aguments in the form:
 |main   |The main type to use (can be empty or "auto"). If provided then corresponds to a manifest entry name (case insensitive). |start-class |
 |extra  |Additional JVM command line options     |-verbose:class |
 
+The numerical arguments can be replaced with "0", in which case the buildpack will choose
+a default value.
+
 Example:
 
 ```
@@ -109,6 +112,18 @@ runs the freemarker sample as a boot app with a command line with these options:
 $ -Xmx74M -Xms32M -Xss366K -XX:MaxMetaspaceSize=80M -XX:MetaspaceSize=20M -XX:CompressedClassSpaceSize=8M -XX:ReservedCodeCacheSize=4M
 ```
 
+Or
+
+```
+$ ./push.sh ssmb128  micro boot   128 24 0 0 0 0 0 0
+```
+
+runs the micro sample as a boot app with a command line with these options:
+
+```
+$ -Xmx24M
+```
+
 You can manually do the same thing as the build, once the jar files
 are prepared, like this (with a custom input file):
 
@@ -116,3 +131,11 @@ are prepared, like this (with a custom input file):
 $ cat myinputs.txt | xargs -L 1 ./push.sh
 ```
 
+## Manifests
+
+The `push.sh` script builds a `manifest.yml` from a template. It uses
+a full custom command, in order to be able to control absolutely
+everything. It would be sufficient, if all you needed was to control
+the memory flags, just to set `JAVA_OPTS`. E.g. `JAVA_OPTS=-Xmx28M` to
+limit the max heap size and have the build pack calculate everything
+else.

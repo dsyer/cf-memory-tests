@@ -7,6 +7,13 @@ manfsi freemarker shaded 128 running 0
 manmb micro boot 128 running 0
 manmbm micro boot 128 running 0
 manms micro shaded 128 running 0
+defmbm16 micro boot 128 running 0
+defmbm10 micro boot 128 running 0
+defmbm8 micro boot 64 crashed 0
+defmbm8 micro boot 96 running 0
+deffbm16 freemarker boot 128 running 0
+deffbm8 freemarker boot 128 crashed 0
+deffbm12 freemarker boot 128 crashed 0
 ssmb128 micro boot 128 running 0
 ssmb256 micro boot 256 running 0
 ssmb512 micro boot 512 running 0

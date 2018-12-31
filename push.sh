@@ -23,13 +23,21 @@ id=$1; shift
 app=$1; shift
 type=$1; shift
 limit=$1; shift
-opts=-Xmx${1}M; shift
-opts="$opts -Xms${1}M"; shift
-opts="$opts -Xss${1}K"; shift
-opts="$opts -XX:MaxMetaspaceSize=${1}M"; shift
-opts="$opts -XX:MetaspaceSize=${1}M"; shift
-opts="$opts -XX:CompressedClassSpaceSize=${1}M"; shift
-opts="$opts -XX:ReservedCodeCacheSize=${1}M"; shift
+opts=
+opt=${1}; shift
+[ "${opt}" == "0" ] || opts="$opts -Xmx${opt}M"
+opt=${1}; shift
+[ "${opt}" == "0" ] || opts="$opts -Xms${opt}M"
+opt=${1}; shift
+[ "${opt}" == "0" ] || opts="$opts -Xss${opt}K"
+opt=${1}; shift
+[ "${opt}" == "0" ] || opts="$opts -XX:MaxMetaspaceSize=${opt}M"
+opt=${1}; shift
+[ "${opt}" == "0" ] || opts="$opts -XX:MetaspaceSize=${opt}M"
+opt=${1}; shift
+[ "${opt}" == "0" ] || opts="$opts -XX:CompressedClassSpaceSize=${opt}M"
+opt=${1}; shift
+[ "${opt}" == "0" ] || opts="$opts -XX:ReservedCodeCacheSize=${opt}M"
 mainkey=$1; shift
 opts="$opts $*"
 
@@ -40,7 +48,7 @@ fi
 rm -rf build/META-INF
 (cd build/; jar -xf ${type}/${app}.jar META-INF/MANIFEST.MF)
 if [ -e build/META-INF/MANIFEST.MF ]; then
-    main=`grep -i ${mainkey} build/META-INF/MANIFEST.MF | awk -F ':' '{print $2}'`
+    main=`grep -i ${mainkey} build/META-INF/MANIFEST.MF | awk -F ':' '{print $2}' | sed 's/\s//g'`
 fi
 if [ "${main}" == "" ]; then
     main='org.springframework.boot.loader.JarLauncher'
