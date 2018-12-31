@@ -10,7 +10,8 @@ manms micro shaded 128 running 0
 defmbm16 micro boot 128 running 0
 defmbm10 micro boot 128 running 0
 defmbm8 micro boot 64 crashed 0
-defmbm8 micro boot 96 running 0
+defmb8 micro boot 64 running 100
+defmbm8a micro boot 96 running 0
 deffbm16 freemarker boot 128 running 0
 deffbm8 freemarker boot 128 crashed 0
 deffbm12 freemarker boot 128 crashed 0

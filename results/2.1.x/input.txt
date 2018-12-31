@@ -22,7 +22,8 @@ manms     micro shaded 128  24  16  256  32  20 8 4
 defmbm16       micro        boot 128 16 0 0 0 0 0 0 start-class
 defmbm10       micro        boot 128 10 0 0 0 0 0 0 start-class
 defmbm8        micro        boot 64  8  0 0 0 0 0 0 start-class
-defmbm8        micro        boot 96  8  0 0 0 0 0 0 start-class
+defmb8         micro        boot 64  8  0 0 0 0 0 0
+defmbm8a       micro        boot 96  8  0 0 0 0 0 0 start-class
 deffbm16       freemarker   boot 128 16 0 0 0 0 0 0 start-class
 deffbm8        freemarker   boot 128 8  0 0 0 0 0 0 start-class
 deffbm12       freemarker   boot 128 12 0 0 0 0 0 0 start-class
