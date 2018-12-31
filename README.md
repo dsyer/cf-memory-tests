@@ -43,7 +43,8 @@ There are a couple of sample apps in subdirectories:
 * *freemarker*: the freemarker sample from Spring Boot
 * *zuul*: a basic reverse proxy with Spring Cloud
 * *ratpack*: a "Hello World" Spring Boot Ratpack app
-* *dispatcher*: a "Hello World" Spring Boot Reactive app with RxNetty
+* *dispatcher*: a "Hello World" Spring Boot app with Netty
+* *micro*: Hello World with Spring Boot WebFlux and manual configuration selection
 
 Every sample can be built on the command line either with nested jars
 (standard Spring Boot tooling) or shaded. E.g.

@@ -6,6 +6,5 @@ applications:
   random-route: true
   env:
     JBP_LOG_LEVEL: DEBUG
+    JAVA_OPTS: %{opts}
   timeout: 180
-  buildpack: java_buildpack
-  command: SERVER_PORT=$PORT $PWD/.java-buildpack/open_jdk_jre/bin/java -cp $PWD/.:%{lib}$PWD/.java-buildpack/spring_auto_reconfiguration/spring_auto_reconfiguration-1.10.0_RELEASE.jar -Djava.io.tmpdir=$TMPDIR %{opts} -XX:+DisableAttachMechanism -verbose:gc %{main}
