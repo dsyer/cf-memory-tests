@@ -15,6 +15,7 @@
 	<name>Parent Demo</name>
 
 	<modules>
+		<module>micro</module>
 		<module>dispatcher</module>
 		<module>ratpack</module>
 		<module>zuul</module>

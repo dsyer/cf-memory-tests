@@ -13,7 +13,20 @@ manfs     freemarker shaded 128  24  16  256  32  20 8 4
 manfbi    freemarker boot   128  28  28  256  32  20 8 4
 manfsi    freemarker shaded 128  24  24  256  32  32 8 4
 
+# Manual tweaks on micro sample
+manmb     micro boot   128  28  16  256  38  20 8 4 auto
+manmbm    micro boot   128  32  16  256  38  20 8 4 start-class
+manms     micro shaded 128  24  16  256  32  20 8 4
+
 # Super simple recipes using just the memory limit
+ssmb128  micro boot   128  26  16  256  40  20 8 4
+ssmb256  micro boot   256  74  32  366  80  20 8 4
+ssmb512  micro boot   512  162 100 585  168 20 8 4
+ssmb1024 micro boot   1024 626 300 1024 210 20 8 4
+ssmbm128  micro boot   128  26  16  256  40  20 8 4 start-class
+ssmbm256  micro boot   256  74  32  366  80  20 8 4 start-class
+ssmbm512  micro boot   512  162 100 585  168 20 8 4 start-class
+ssmbm1024 micro boot   1024 626 300 1024 210 20 8 4 start-class
 ssfb128  freemarker boot   128  26  16  256  40  20 8 4
 ssfb256  freemarker boot   256  74  32  366  80  20 8 4
 ssfb512  freemarker boot   512  162 100 585  168 20 8 4
